@@ -1,2 +1,2 @@
 # demo-service
-Demo Service using proof of concept
+Demo Service for doing POC.
