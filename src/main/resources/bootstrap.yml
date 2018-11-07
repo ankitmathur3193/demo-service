@@ -1,0 +1,21 @@
+eureka:
+  client:
+    region: default
+    registry-fetch-interval-seconds: 5
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+      
+
+spring:
+  application:
+    name: demo-service
+  cloud:
+    config:
+      enabled: true
+      discovery:
+        enabled: true
+        service-id: CLOUD-CONFIG
+      fail-fast: true         
+       
+    
+      

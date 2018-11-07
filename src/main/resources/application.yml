@@ -1,0 +1,23 @@
+server:
+  port: 8800
+ 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*' 
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
