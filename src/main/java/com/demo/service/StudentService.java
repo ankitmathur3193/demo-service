@@ -2,6 +2,7 @@ package com.demo.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -36,11 +37,13 @@ public class StudentService {
 				+ studentEntity.getLastName() + "#"
 				+ studentEntity.getDateOfBirth() + "#"
 				+ studentEntity.getFatherName();
-		Integer id = studentNameIdRepository.getStudentByNameId(nameId);
-		if (id != null) {
+		Optional<Integer> id = Optional.ofNullable(studentNameIdRepository
+				.getStudentByNameId(nameId));
+		if (!id.isPresent()) {
 			ExceptionUtils
 					.throwEntityAlreadyExistsException("Student already exists with enrollementId: "
 							+ id);
+			System.out.println("id is not valid");
 		} else {
 			studentEntity.setAdmissiononStart(new Date());
 			Integer enrollementId = studentRepository.save(studentEntity);
@@ -53,7 +56,7 @@ public class StudentService {
 
 	private StudentRequestResource preHandle(
 			StudentRequestResource studentRequestResource) {
-		if (studentRequestResource.getFirstName() == null) {
+		if (StringUtils.isEmpty(studentRequestResource.getFirstName())) {
 			ExceptionUtils.throwBadRequestException("firstname is not valid");
 		}
 		return studentRequestResource;
@@ -68,14 +71,15 @@ public class StudentService {
 		if (enrollmentId == null) {
 			ExceptionUtils
 					.throwBadRequestException("enrollmentId is not valid");
+			System.out.println("enrollmentd is not valid");
 		}
-		StudentEntity studentEntity = studentRepository
-				.getStudentById(enrollmentId);
-		if (studentEntity == null) {
+		Optional<StudentEntity> studentEntity = Optional
+				.ofNullable(studentRepository.getStudentById(enrollmentId));
+		if (!studentEntity.isPresent()) {
 			ExceptionUtils
 					.throwEntityNotFoundException("student with enrollmentId not present");
 		}
-		return studentEntity;
+		return studentEntity.get();
 	}
 
 	public List<StudentEntity> getStudentByName(String firstName,

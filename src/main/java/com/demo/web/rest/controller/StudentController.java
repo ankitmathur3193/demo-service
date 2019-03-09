@@ -41,15 +41,16 @@ public class StudentController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{enrollmentId}", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<StudentResponseResource> getStudentByEnrollmentId(
-			@PathVariable("enrollmentId") Integer enrollmentId) {
+			@ApiParam("Get the students by enrollment id") @PathVariable("enrollmentId") Integer enrollmentId) {
 		return new ResponseEntity<>(StudentAssembler.convert(studentService
 				.getStudentByEnrollmentId(enrollmentId)), HttpStatus.OK);
 
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/search/{firstName}", produces = "application/json; charset=UTF-8")
+	@ApiOperation(value = "Get Students by Name")
 	public ResponseEntity<List<StudentResponseResource>> getStudentsByName(
-			@PathVariable("firstName") String firstName,
+			@ApiParam("Get the students by name") @PathVariable("firstName") String firstName,
 			@RequestParam(value = "lastName", required = false , defaultValue="") String lastName) {
 		return new ResponseEntity<>(studentService
 				.getStudentByName(firstName, lastName).stream()

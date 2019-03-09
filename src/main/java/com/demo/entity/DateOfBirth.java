@@ -1,6 +1,6 @@
 package com.demo.entity;
 
-public class DateOfBirth implements Comparable<DateOfBirth>{
+public class DateOfBirth {
 
 	private Integer day;
 	private Integer month;
@@ -84,28 +84,6 @@ public class DateOfBirth implements Comparable<DateOfBirth>{
 		return true;
 	}
 
-	@Override
-	public int compareTo(DateOfBirth obj) {
-		if(obj.year == this.year){
-			if(obj.month == this.month)
-			{
-				if(obj.day == this.day)
-					return 0;
-				else if(this.day > obj.day)
-					return 1;
-				else
-					return -1;
-			}
-			else if(this.month > obj.month)
-				return 1;
-			else
-				return -1;
-		}
-		else if (this.year > obj.year)
-			return 1;
-		else return -1;
-
-	}
 
 	
 }
