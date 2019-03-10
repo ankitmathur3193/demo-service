@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.demo.entity.StudentEntity;
 import com.demo.repositroy.StudentNameIdRepository;
+import com.demo.utils.DataConstants;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,9 +27,7 @@ public class StudentNameIdMapRepository implements StudentNameIdRepository {
 
 	@PostConstruct
 	void init() throws JsonParseException, JsonMappingException, IOException {
-		String student = "{\"firstName\":\"Ankit\",\"lastName\":\"Mathur\",\"classEntity\":{\"currentClass\":1,\"section\":\"SECTION_A\"},\"fatherName\":\"R D Mathur\",\"motherName\":\"Renu Mathur\",\"contactNumber\":\"97177295562\",\"emailId\":\"amathur@gmail.com\",\"dateOfBirth\":{\"day\":8,\"month\":11,\"year\":1993},\"address\":{\"state\":\"Delhi\",\"pinCode\":110028,\"streetName\":\"Naraina vihar\"},\"classRollNo\":1,\"admissionStatus\":\"ACTIVE\",\"admissiononStart\":\"2019-03-03T06:29:56.254+0000\",\"enrollmentId\":1}";
-		ObjectMapper objectMapper = new ObjectMapper();
-		StudentEntity studentEntity = objectMapper.readValue(student,
+		StudentEntity studentEntity = DataConstants.OBJECTMAPPER.readValue(DataConstants.STUDENT,
 				StudentEntity.class);
 		String nameId = studentEntity.getFirstName() + "#"
 				+ studentEntity.getLastName() + "#"
@@ -44,8 +43,8 @@ public class StudentNameIdMapRepository implements StudentNameIdRepository {
 	}
 	
 	@Override
-	public Integer getStudentByNameId(String nameIdString) {
-		return Optional.ofNullable(nameIdMap.get(nameIdString)).get();
+	public Optional<Integer> getStudentByNameId(String nameIdString) {
+		return Optional.ofNullable(nameIdMap.get(nameIdString));
 	}
 
 	@Override

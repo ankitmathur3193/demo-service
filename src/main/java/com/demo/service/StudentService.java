@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class StudentService {
 
 	private StudentNameIdRepository studentNameIdRepository;
 	private StudentRepository studentRepository;
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	public StudentService(StudentNameIdRepository studentNameIdRepository,
@@ -37,13 +40,13 @@ public class StudentService {
 				+ studentEntity.getLastName() + "#"
 				+ studentEntity.getDateOfBirth() + "#"
 				+ studentEntity.getFatherName();
-		Optional<Integer> id = Optional.ofNullable(studentNameIdRepository
-				.getStudentByNameId(nameId));
+		Optional<Integer> id = studentNameIdRepository
+				.getStudentByNameId(nameId);
 		if (!id.isPresent()) {
 			ExceptionUtils
 					.throwEntityAlreadyExistsException("Student already exists with enrollementId: "
 							+ id);
-			System.out.println("id is not valid");
+			logger.error("Id is not valid");
 		} else {
 			studentEntity.setAdmissiononStart(new Date());
 			Integer enrollementId = studentRepository.save(studentEntity);
@@ -71,10 +74,10 @@ public class StudentService {
 		if (enrollmentId == null) {
 			ExceptionUtils
 					.throwBadRequestException("enrollmentId is not valid");
-			System.out.println("enrollmentd is not valid");
+			logger.error("enrollmentd is not valid");
 		}
-		Optional<StudentEntity> studentEntity = Optional
-				.ofNullable(studentRepository.getStudentById(enrollmentId));
+		Optional<StudentEntity> studentEntity = studentRepository
+				.getStudentById(enrollmentId);
 		if (!studentEntity.isPresent()) {
 			ExceptionUtils
 					.throwEntityNotFoundException("student with enrollmentId not present");
@@ -85,9 +88,10 @@ public class StudentService {
 	public List<StudentEntity> getStudentByName(String firstName,
 			String lastName) {
 		if (StringUtils.isEmpty(lastName)) {
-			return studentRepository.getStudentByFirstName(firstName);
+			return studentRepository.getStudentByFirstName(firstName).get();
 		} else {
-			return studentRepository.getStudentsByName(firstName, lastName);
+			return studentRepository.getStudentsByName(firstName, lastName)
+					.get();
 		}
 
 	}

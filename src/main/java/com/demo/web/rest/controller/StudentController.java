@@ -1,7 +1,10 @@
 package com.demo.web.rest.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javax.swing.text.html.Option;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -40,8 +43,9 @@ public class StudentController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{enrollmentId}", produces = "application/json; charset=UTF-8")
+	@ApiOperation(value = "Get Student by EnrollmentID")
 	public ResponseEntity<StudentResponseResource> getStudentByEnrollmentId(
-			@ApiParam("Get the students by enrollment id") @PathVariable("enrollmentId") Integer enrollmentId) {
+			@ApiParam("Get student by enrollment id") @PathVariable("enrollmentId") Integer enrollmentId) {
 		return new ResponseEntity<>(StudentAssembler.convert(studentService
 				.getStudentByEnrollmentId(enrollmentId)), HttpStatus.OK);
 
