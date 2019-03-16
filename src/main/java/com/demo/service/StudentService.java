@@ -23,7 +23,7 @@ public class StudentService {
 
 	private StudentNameIdRepository studentNameIdRepository;
 	private StudentRepository studentRepository;
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	public StudentService(StudentNameIdRepository studentNameIdRepository,
@@ -46,7 +46,7 @@ public class StudentService {
 			ExceptionUtils
 					.throwEntityAlreadyExistsException("Student already exists with enrollementId: "
 							+ id);
-			logger.error("Id is not valid");
+			LOGGER.error("Enrollment with id " + id.get() + " already exist");
 		} else {
 			studentEntity.setAdmissiononStart(new Date());
 			Integer enrollementId = studentRepository.save(studentEntity);
@@ -73,8 +73,8 @@ public class StudentService {
 
 		if (enrollmentId == null) {
 			ExceptionUtils
-					.throwBadRequestException("enrollmentId is not valid");
-			logger.error("enrollmentd is not valid");
+					.throwBadRequestException("enrollmentId is null");
+			LOGGER.error("enrollmentd is null");
 		}
 		Optional<StudentEntity> studentEntity = studentRepository
 				.getStudentById(enrollmentId);
